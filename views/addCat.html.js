@@ -33,8 +33,8 @@ export default ()=> `<!DOCTYPE html>
             <label for="group">Breed</label>
             <select name="breed" id="group">
                 <option value="Fluffy Cat">Fluffy Cat</option>
-				<option value="Fluffy Cat">Fluffy Cat</option>
-				<option value="Fluffy Cat">Fluffy Cat</option>
+				<option value="Aggressive Cat">Aggressive Cat</option>
+				<option value="Shorthaired Cat">Shorthaired Cat</option>
             </select>
             <button type="submit">Add Cat</button>
         </form>

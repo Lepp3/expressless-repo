@@ -4,38 +4,13 @@ import styles from './content/styles/site.css.js';
 import addBreedPage from './views/addBreed.html.js';
 import addCatPage from './views/addCat.html.js';
 import { v4 as uuidv4} from 'uuid';
+import fs from 'fs/promises';
 
 
 
-const cats = [
-    {
-        id: 1,
-        imageUrl: 'https://media.4-paws.org/f/8/0/5/f8055215b5cdc5dee5494c255ca891d7b7d33cd1/Molly_006-2829x1886-2726x1886.jpg',
-        name: 'Pretty kitty',
-        breed: 'bombay',
-        description: 'sikem sana'
-    },
-    {
-        id: 2,
-        imageUrl: 'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-        name: 'Pretty kitty',
-        breed: 'bombay',
-        description: 'sikem sana'
-    },
-    {
-        id: 3,
-        imageUrl: 'https://plus.unsplash.com/premium_photo-1667030474693-6d0632f97029?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2F0fGVufDB8fDB8fHww',
-        name: 'Pretty kitty',
-        breed: 'bombay',
-        description: 'sikem sana'
-    }, {
-        id: 4,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/1200px-Cat_November_2010-1a.jpg',
-        name: 'Pretty kitty',
-        breed: 'bombay',
-        description: 'sikem sana'
-    }
-]
+let cats = [];
+
+initCats();
 
 const server = http.createServer((req,res)=>{
 
@@ -51,7 +26,15 @@ const server = http.createServer((req,res)=>{
             cats.push({
                 id:id,
                 ...Object.fromEntries(data.entries()),
-            })
+            });
+
+            saveCats();
+
+            res.writeHead(302, {
+                'location': '/',
+            });
+            
+
             res.end();
         });
 
@@ -87,10 +70,21 @@ const server = http.createServer((req,res)=>{
             res.write('Page not found');
             break;
     }
-
+    
     res.end();
 
 });
+
+
+async function initCats(){
+    const catsJson = await fs.readFile('./cats.json',{encoding: 'utf-8'});
+    cats = JSON.parse(catsJson);
+}
+
+async function saveCats(){
+    const catsJson = JSON.stringify(cats,null,2);
+    await fs.writeFile('./cats.json/',catsJson,{encoding: 'utf-8'});
+}
 
 server.listen(5000);
 console.log('Server is listening on http://localhost:5000...');
