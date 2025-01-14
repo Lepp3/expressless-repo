@@ -9,8 +9,10 @@ import fs from 'fs/promises';
 
 
 let cats = [];
+let breeds = [];
 
 initCats();
+initBreeds();
 
 const server = http.createServer((req,res)=>{
 
@@ -22,6 +24,7 @@ const server = http.createServer((req,res)=>{
 
         req.on('end', ()=>{
             const data  = new URLSearchParams(body);
+            if(req.url === '/cats/add-cat'){
             let id = uuidv4();
             cats.push({
                 id:id,
@@ -33,7 +36,19 @@ const server = http.createServer((req,res)=>{
             res.writeHead(302, {
                 'location': '/',
             });
-            
+            }else if(req.url === '/cats/add-breed'){
+                let id = uuidv4();
+                breeds.push({
+                    id: id,
+                    ...Object.fromEntries(data.entries())
+                });
+                
+                console.log(data);
+                saveBreeds();
+                res.writeHead(302,{
+                    'location': '/',
+                });
+            }
 
             res.end();
         });
@@ -83,7 +98,17 @@ async function initCats(){
 
 async function saveCats(){
     const catsJson = JSON.stringify(cats,null,2);
-    await fs.writeFile('./cats.json/',catsJson,{encoding: 'utf-8'});
+    await fs.writeFile('./cats.json',catsJson,{encoding: 'utf-8'});
+}
+
+async function initBreeds(){
+    const breedsJson = await fs.readFile('./breeds.json',{encoding:'utf-8'});
+    breeds = JSON.parse(breedsJson);
+}
+
+async function saveBreeds(){
+    const breedsJson = JSON.stringify(breeds,null,2);
+    await fs.writeFile('./breeds.json',breedsJson,{encoding: 'utf-8'});
 }
 
 server.listen(5000);

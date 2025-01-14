@@ -1,3 +1,4 @@
+
 export default ()=> `<!DOCTYPE html>
 <html lang="en">
 
@@ -22,13 +23,15 @@ export default ()=> `<!DOCTYPE html>
         <h1>Cat Shelter</h1>
     </header>
     <main>
-        <form action="#" method="" class="cat-form">
+        <form action="/cats/add-breed" method="POST" class="cat-form">
             <h2>Add Cat Breed</h2>
             <label for="breed-name">Breed Name</label>
-            <input name="breed" type="text" id="breed-name">
+            <input name="name" type="text" id="breed-name">
             <button type="submit">Add Breed</button>
         </form>
     </main>
 </body>
 
 </html>`
+
+

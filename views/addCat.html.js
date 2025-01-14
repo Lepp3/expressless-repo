@@ -1,3 +1,10 @@
+import fs from 'fs/promises';
+
+let breeds = [];
+
+initBreeds();
+
+
 export default ()=> `<!DOCTYPE html>
 <html lang="en">
 
@@ -32,9 +39,8 @@ export default ()=> `<!DOCTYPE html>
             <input name="imageUrl" type="text" id="image">
             <label for="group">Breed</label>
             <select name="breed" id="group">
-                <option value="Fluffy Cat">Fluffy Cat</option>
-				<option value="Aggressive Cat">Aggressive Cat</option>
-				<option value="Shorthaired Cat">Shorthaired Cat</option>
+                ${breeds.map(breed=>{
+                    return `<option value=${breed.name}>${breed.name}</option>`}).join('')}
             </select>
             <button type="submit">Add Cat</button>
         </form>
@@ -42,3 +48,9 @@ export default ()=> `<!DOCTYPE html>
 </body>
 
 </html>`
+
+
+async function initBreeds(){
+    const breedsJson = await fs.readFile('./breeds.json',{encoding:'utf-8'});
+    breeds = JSON.parse(breedsJson);
+}
