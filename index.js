@@ -3,6 +3,8 @@ import homePage from './views/home/index.html.js';
 import styles from './content/styles/site.css.js';
 import addBreedPage from './views/addBreed.html.js';
 import addCatPage from './views/addCat.html.js';
+import shelterCatPage from './views/catShelter.html.js';
+import editCatPage from './views/editCat.html.js';
 import { v4 as uuidv4} from 'uuid';
 import fs from 'fs/promises';
 
@@ -48,6 +50,19 @@ const server = http.createServer((req,res)=>{
                 res.writeHead(302,{
                     'location': '/',
                 });
+            }else if(req.url.includes('/delete')){
+                let id = req.url.split('/')[2];
+                cats = cats.filter((cat)=>cat.id !== id);
+                saveCats();
+                res.writeHead(302,{
+                    'location': '/',
+                })
+            }else if(req.url.includes('/edit/')){
+                //TODO => GET CAT FROM CATS ARR AND REPLACE WITH GIVEN INFO
+                saveCats();
+                res.writeHead(302,{
+                    'location': '/',
+                })
             }
 
             res.end();
@@ -70,20 +85,22 @@ const server = http.createServer((req,res)=>{
         'content-type': 'text/html'
     })
 
-    switch(req.url){
-        case '/':
-            res.write(homePage(cats));
-            break;
-        case '/cats/add-breed':
-            res.write(addBreedPage());
-            break;
-        case '/cats/add-cat':
-            res.write(addCatPage());
-            break;
-
-        default:
-            res.write('Page not found');
-            break;
+    if(req.url === '/'){
+        res.write(homePage(cats));
+    }else if(req.url === '/cats/add-cat'){
+        res.write(addCatPage());
+    }else if(req.url === '/cats/add-breed'){
+        res.write(addBreedPage());
+    }else if(req.url.includes('/cats-find-new-home')){
+        let id = req.url.split('/')[2];
+        let cat = cats.find((cat)=>cat.id === id);
+        res.write(shelterCatPage(cat));
+    }else if(req.url.includes('/cats-edit')){
+        let id = req.url.split('/')[2];
+        let cat = cats.find((cat)=>cat.id === id);
+        res.write(editCatPage(cat,breeds));
+    }else{
+        res.write('Page not found')
     }
     
     res.end();
