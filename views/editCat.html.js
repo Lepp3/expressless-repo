@@ -24,18 +24,18 @@ export default (cat,breeds) => `<!DOCTYPE html>
     <main>
         <form action="/edit/${cat.id}" method="POST" class="cat-form">
             <h2>Edit Cat</h2>
-            <label for="name">${cat.name}</label>
-            <input type="text" id="name" value="${cat.name}">
+            <label for="name">Name</label>
+            <input name="name" type="text" id="name" value="${cat.name}">
             <label for="description">Description</label>
-            <textarea id="description">${cat.description}</textarea>
+            <textarea name="description" id="description">${cat.description}</textarea>
             <label for="image">Image</label>
-            <input type="text" id="image" value="${cat.imageUrl}">
+            <input name="imageUrl" type="text" id="image" value="${cat.imageUrl}">
             <label for="group">Breed</label>
-            <select id="group">
+            <select name="breed" id="group">
             ${breeds.map(breed=>{
                 return `<option value=${breed.name}>${breed.name}</option>`}).join('')}
             </select>
-            <button>Edit Cat</button>
+            <button type="submit">Edit Cat</button>
         </form>
     </main>
 </body>

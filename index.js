@@ -51,14 +51,24 @@ const server = http.createServer((req,res)=>{
                     'location': '/',
                 });
             }else if(req.url.includes('/delete')){
-                let id = req.url.split('/')[2];
+                const id = req.url.split('/')[2];
                 cats = cats.filter((cat)=>cat.id !== id);
                 saveCats();
                 res.writeHead(302,{
                     'location': '/',
                 })
             }else if(req.url.includes('/edit/')){
-                //TODO => GET CAT FROM CATS ARR AND REPLACE WITH GIVEN INFO
+                const id = req.url.split('/')[2];
+                const index = cats.findIndex(cat=>cat.id == id);
+                let dataInput = Object.fromEntries(data.entries());
+                let firstHalf = cats.slice(0,index);
+                let secondHalf = cats.slice(index);
+                let edittedCat = {
+                    id:id,
+                    ...Object.fromEntries(data.entries())
+                }
+                firstHalf.push(edittedCat,...secondHalf);
+                cats = firstHalf;
                 saveCats();
                 res.writeHead(302,{
                     'location': '/',

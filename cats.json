@@ -8,6 +8,13 @@
   },
   {
     "id": "512fnm4c-5n74-4h3b-94bf-75ae8452dac7",
+    "name": "Glossy Kitty",
+    "description": "Helpless if unbothered",
+    "imageUrl": "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg",
+    "breed": "Fluffy"
+  },
+  {
+    "id": "512fnm4c-5n74-4h3b-94bf-75ae8452dac7",
     "imageUrl": "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg",
     "name": "Bossy kitty",
     "breed": "bombay",
