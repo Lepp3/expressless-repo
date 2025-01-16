@@ -60,15 +60,11 @@ const server = http.createServer((req,res)=>{
             }else if(req.url.includes('/edit/')){
                 const id = req.url.split('/')[2];
                 const index = cats.findIndex(cat=>cat.id == id);
-                let dataInput = Object.fromEntries(data.entries());
-                let firstHalf = cats.slice(0,index);
-                let secondHalf = cats.slice(index);
                 let edittedCat = {
                     id:id,
                     ...Object.fromEntries(data.entries())
                 }
-                firstHalf.push(edittedCat,...secondHalf);
-                cats = firstHalf;
+                cats[index] = edittedCat;
                 saveCats();
                 res.writeHead(302,{
                     'location': '/',
