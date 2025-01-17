@@ -12,6 +12,7 @@ import fs from 'fs/promises';
 
 let cats = [];
 let breeds = [];
+let searchResult = [];
 
 initCats();
 initBreeds();
@@ -69,6 +70,16 @@ const server = http.createServer((req,res)=>{
                 res.writeHead(302,{
                     'location': '/',
                 })
+            }else if(req.url.includes('/search')){
+                let searchParam = data.get('search');
+                if(searchParam === ""){
+                    searchResult = cats;
+                    return;
+                }
+                searchResult = cats.filter(cat=>cat.name.toLowerCase().includes(searchParam.toLowerCase()));
+                res.writeHead(302,{
+                    'location': '/search/results'
+                })
             }
 
             res.end();
@@ -105,7 +116,10 @@ const server = http.createServer((req,res)=>{
         let id = req.url.split('/')[2];
         let cat = cats.find((cat)=>cat.id === id);
         res.write(editCatPage(cat,breeds));
-    }else{
+    }else if(req.url.includes('/search/')){
+        res.write(homePage(searchResult));
+    }
+    else{
         res.write('Page not found')
     }
     
@@ -134,5 +148,5 @@ async function saveBreeds(){
     await fs.writeFile('./breeds.json',breedsJson,{encoding: 'utf-8'});
 }
 
-server.listen(5000);
-console.log('Server is listening on http://localhost:5000...');
+server.listen(5001);
+console.log('Server is listening on http://localhost:5001...');
